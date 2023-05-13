@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  shell-dev-db:
+    image: postgres:13.2
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: issue_tracker
+    volumes:
+      - type: volume
+        source: ISSUE_TRACKER_DATA
+        target: /data/postgres
+      - type: volume
+        source: ISSUE_TRACKER_CONFIG
+        target: /data/config
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ISSUE_TRACKER
+
+networks:
+  ISSUE_TRACKER:
+    name: ISSUE_TRACKER
+
+volumes:
+  ISSUE_TRACKER_DATA:
+    name: ISSUE_TRACKER_DATA
+  ISSUE_TRACKER_CONFIG:
+    name: ISSUE_TRACKER_CONFIG
