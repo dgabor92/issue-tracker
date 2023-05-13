@@ -1,5 +1,6 @@
 import Head from "next/head";
-import { Main } from "next/document";
+import IssueTrackerForm from "./IssueTrackerForm";
+import IssueList from "./IssueList";
 
 export default function Home() {
   return (
@@ -10,9 +11,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="header">
-        <h1>Issue Tracker</h1>
+      <h1>Issue Tracker</h1>
+      <div className="issue-form">
+        <IssueTrackerForm />
       </div>
+      <div>{/* <IssueList /> */}</div>
     </>
   );
 }

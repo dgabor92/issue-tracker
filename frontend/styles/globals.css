@@ -11,3 +11,70 @@ h1 {
   text-align: center;
   margin: 20px auto;
 }
+
+.issue-form {
+  display: flex;
+  flex-direction: column;
+  margin: 20px auto;
+  width: 50%;
+  background-color: #eeeeee;
+  border-radius: 4px;
+  margin: 20px auto;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  display: flex;
+  margin: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin: 20px auto;
+  width: 80%;
+}
+input {
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  width: 100%;
+}
+
+textarea {
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: 400;
+  width: 100%;
+}
+
+select {
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: 400;
+  width: 100%;
+}
+
+button {
+  margin: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 400;
+  background-color: #347ab7;
+  cursor: pointer;
+}
