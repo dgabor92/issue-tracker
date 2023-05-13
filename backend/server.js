@@ -25,34 +25,53 @@ app.use(express.json());
 
 // Create new issue
 app.post("/api/issues", (req, res) => {
-  const { description, severity, assignedTo } = req.body;
+  const { description, severity, assignedTo, assignedFrom } = req.body;
+  //need to make sure that assignedTo and assignedFrom are not the same and both are valied emails
+
   const issueId = chance.guid();
   const issueStatus = "Open";
-  pool.query(
-    "SELECT COUNT(*) FROM issues WHERE description = $1",
-    [description],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      const count = parseInt(results.rows[0].count);
-      if (count > 0) {
-        res.status(400).send("This issue already exists!");
-      } else {
-        // Hozzáadás az adatbázishoz
-        pool.query(
-          "INSERT INTO issues (id, description, severity, assigned_to, status) VALUES ($1, $2, $3, $4, $5)",
-          [issueId, description, severity, assignedTo, issueStatus],
-          (error, results) => {
-            if (error) {
-              throw error;
+  const created_at = new Date();
+  if (!description || !severity || !assignedTo || !assignedFrom) {
+    res.status(400).send("Missing required fields!");
+  } else if (assignedTo === assignedFrom) {
+    res.status(400).send("You can't assign an issue to yourself!");
+  } else if (!assignedTo.includes("@") || !assignedFrom.includes("@")) {
+    res.status(400).send("Invalid email address!");
+  } else {
+    pool.query(
+      "SELECT COUNT(*) FROM issues WHERE description = $1",
+      [description],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        const count = parseInt(results.rows[0].count);
+        if (count > 0) {
+          res.status(400).send("This issue already exists!");
+        } else {
+          // Insert new issue into database
+          pool.query(
+            "INSERT INTO issues (id, description, severity, assigned_to, assigned_from, status, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+            [
+              issueId,
+              description,
+              severity,
+              assignedTo,
+              assignedFrom,
+              issueStatus,
+              created_at,
+            ],
+            (error, results) => {
+              if (error) {
+                throw error;
+              }
+              res.status(201).send("New issue added!");
             }
-            res.status(201).send("New issue added!");
-          }
-        );
+          );
+        }
       }
-    }
-  );
+    );
+  }
 });
 
 // All issues list
@@ -68,7 +87,6 @@ app.get("/api/issues", (req, res) => {
 // Issue status update
 app.put("/api/issues/:id", (req, res) => {
   const { id } = req.params;
-
   pool.query(
     "UPDATE issues SET status = $1 WHERE id = $2",
     ["Closed", id],
@@ -76,7 +94,7 @@ app.put("/api/issues/:id", (req, res) => {
       if (error) {
         throw error;
       }
-      res.status(200).send("Az issue állapota frissítve!");
+      res.status(200).send("The issue status has been updated!");
     }
   );
 });
@@ -89,7 +107,7 @@ app.delete("/api/issues/:id", (req, res) => {
     if (error) {
       throw error;
     }
-    res.status(200).send("Az issue törölve!");
+    res.status(200).send("The issue has been deleted!");
   });
 });
 
