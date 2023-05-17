@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const app = express();
+app.use(cors());
 const port = process.env.SERVER_PORT;
 const dbhost = process.env.DB_HOST;
 const dbport = process.env.DB_PORT;
@@ -32,11 +34,13 @@ app.post("/api/issues", (req, res) => {
   const issueStatus = "Open";
   const created_at = new Date();
   if (!description || !severity || !assignedTo || !assignedFrom) {
-    res.status(400).send("Missing required fields!");
+    res.status(400).json({ message: "All fields are required!" });
   } else if (assignedTo === assignedFrom) {
-    res.status(400).send("You can't assign an issue to yourself!");
+    res
+      .status(400)
+      .json({ message: "You cannot assign an issue to yourself!" });
   } else if (!assignedTo.includes("@") || !assignedFrom.includes("@")) {
-    res.status(400).send("Invalid email address!");
+    res.status(400).json({ message: "Invalid email address!" });
   } else {
     pool.query(
       "SELECT COUNT(*) FROM issues WHERE description = $1",
@@ -47,7 +51,7 @@ app.post("/api/issues", (req, res) => {
         }
         const count = parseInt(results.rows[0].count);
         if (count > 0) {
-          res.status(400).send("This issue already exists!");
+          res.status(400).json({ message: "This issue already exists!" });
         } else {
           // Insert new issue into database
           pool.query(
@@ -65,7 +69,7 @@ app.post("/api/issues", (req, res) => {
               if (error) {
                 throw error;
               }
-              res.status(201).send("New issue added!");
+              res.status(201).json({ message: "The issue has been created!" });
             }
           );
         }
@@ -94,7 +98,7 @@ app.put("/api/issues/:id", (req, res) => {
       if (error) {
         throw error;
       }
-      res.status(200).send("The issue status has been updated!");
+      res.status(200).json({ message: "The issue status has been updated!" });
     }
   );
 });
@@ -107,7 +111,7 @@ app.delete("/api/issues/:id", (req, res) => {
     if (error) {
       throw error;
     }
-    res.status(200).send("The issue has been deleted!");
+    res.status(200).json({ message: "The issue has been deleted!" });
   });
 });
 
