@@ -15,7 +15,9 @@ export default function Home() {
       <div className="issue-form">
         <IssueTrackerForm />
       </div>
-      <div>{/* <IssueList /> */}</div>
+      <div className="issue-list">
+        <IssueList />
+      </div>
     </>
   );
 }
