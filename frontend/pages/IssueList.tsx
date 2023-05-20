@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Issue {
-  id: number;
+  id: string;
   description: string;
   severity: string;
   assigned_to: string;
@@ -14,6 +19,22 @@ export default function IssueList() {
   const [loading, setLoading] = useState(true);
   const [issues, setIssues] = useState<Issue[]>([]);
 
+  const handleDelete = useCallback(
+    (id: string) => {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/issues/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          toast.success(res.message);
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    [issues]
+  );
   useEffect(() => {
     let isCancelled = false;
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/issues`)
@@ -42,34 +63,45 @@ export default function IssueList() {
 
   return (
     <>
-      <h3 className="form-title">Issues</h3>
-      {issues?.map((issue) => (
-        <div className="card" key={issue.id}>
-          <div className="card-title">
-            <h2 className="badge badge-info">{issue.description}</h2>
-            {/* <span className="badge badge-pill badge-secondary ml-2">
-              {issue.severity}
-            </span> */}
-          </div>
-          <div className="card-body">
-            {/* <h6 className="card-subtitle mb-2 text-muted">
-              {issue.description}
-            </h6> */}
-            <h3 className="card-text">
-              Assigned To: <strong>{issue.assigned_to}</strong>
-            </h3>
-            <h3 className="card-text">
-              Assigned From: <strong>{issue.assigned_from}</strong>
-            </h3>
-            <h4 className="card-text">
-              Created At: <strong>{issue.created_at}</strong>
-            </h4>
-            <a href="#" className="card-link">
+      {issues &&
+        issues?.map((issue) => (
+          <div className="card" key={issue.id}>
+            {/* need a delete button */}
+            <div className="card-title">
+              <div>
+                <h2 className="badge badge-info">{issue.description}</h2>
+              </div>
+              <div className="actions">
+                <button className="pencil">
+                  <FontAwesomeIcon icon={faPencil} />
+                </button>
+                <button
+                  className="trashcan"
+                  onClick={() => handleDelete(issue.id)}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+            </div>
+            <div className="card-status">
+              <h2>{issue.status}</h2>
+            </div>
+            <div className="card-body">
+              <h3 className="card-text">Assigned To:{issue.assigned_to}</h3>
+              <h3 className="card-text">
+                Assigned From: {issue.assigned_from}
+              </h3>
+              <h4 className="card-text">
+                Created At:{" "}
+                {moment(issue.created_at).format("YYYY. MMMM DD., HH:mm")}
+              </h4>
+              {/* <a href="#" className="card-link">
               Close
-            </a>
+            </a> */}
+            </div>
+            <ToastContainer />
           </div>
-        </div>
-      ))}
+        ))}
     </>
   );
 }

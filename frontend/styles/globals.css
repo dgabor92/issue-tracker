@@ -19,7 +19,6 @@ h1 {
   width: 50%;
   background-color: #eeeeee;
   border-radius: 4px;
-  margin: 20px auto;
 }
 
 .issue-list {
@@ -29,7 +28,6 @@ h1 {
   width: 50%;
   /* background-color: #eeeeee; */
   border-radius: 4px;
-  margin: 20px auto;
 }
 
 .form-title {
@@ -78,7 +76,7 @@ select {
   width: 100%;
 }
 
-button {
+.submit {
   margin: 20px;
   padding: 10px;
   border-radius: 5px;
@@ -96,11 +94,10 @@ button:hover {
 .card {
   display: flex;
   flex-direction: column;
-  margin: 20px auto;
-  width: 80%;
+  margin: 10px auto;
+  width: 85%;
   background-color: #eeeeee;
   border-radius: 4px;
-  margin: 20px auto;
 }
 
 .card-title {
@@ -110,10 +107,58 @@ button:hover {
   text-align: left;
   display: flex;
   margin: 20px;
+  justify-content: space-between;
+  text-decoration: underline;
+}
+
+.card-status {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  text-align: left;
+  display: flex;
+  padding: 0 20px;
 }
 
 .card-body {
   display: flex;
   flex-direction: column;
   margin: 20px;
+}
+
+.card-text {
+  display: flex;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.trashcan {
+  cursor: pointer;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  margin: 10px;
+}
+
+.trashcan:hover {
+  background-color: #d9534f;
+}
+.pencil {
+  cursor: pointer;
+  background-color: green;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  margin: 10px;
+}
+
+.pencil:hover {
+  background-color: #5cb85c;
 }

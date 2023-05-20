@@ -23,8 +23,7 @@ const pool = new Pool({
 
 app.use(express.json());
 
-// API Endpoints
-
+// API endpoints
 // Create new issue
 app.post("/api/issues", (req, res) => {
   const { description, severity, assignedTo, assignedFrom } = req.body;

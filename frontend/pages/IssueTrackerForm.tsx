@@ -32,12 +32,8 @@ export default function IssueTrackerForm() {
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.status !== 201) {
-          toast.error(res.message);
-        } else {
-          toast.success(res.message);
-          setForm(initialFormState);
-        }
+        toast(res.message);
+        setForm((prevState) => ({ ...prevState, ...initialFormState }));
       })
       .catch((error) => {
         console.log(error);
@@ -92,7 +88,9 @@ export default function IssueTrackerForm() {
             onChange={handleChange}
           />
         </div>
-        <button type="submit">Add</button>
+        <button type="submit" className="submit">
+          Add
+        </button>
         <ToastContainer />
       </form>
     </>
